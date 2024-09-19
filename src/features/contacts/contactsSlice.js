@@ -1,4 +1,6 @@
 // contactsSlice.js
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   createSlice,
   createAsyncThunk,
@@ -31,6 +33,7 @@ export const addContact = createAsyncThunk(
     }
 
     const response = await api.post("/", contact);
+    toast.info("Contact added successfully.");
     return response.data;
   }
 );

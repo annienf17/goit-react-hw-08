@@ -7,7 +7,7 @@ import { addContact } from "../../features/contacts/contactsSlice";
 
 const ContactFormSchema = Yup.object().shape({
   name: Yup.string()
-    .matches(/^[A-Za-z]+$/, "Imię może zawierać tylko litery")
+    .matches(/^[A-Za-z\s]+$/, "Imię może zawierać tylko litery i spacje")
     .required("Wypełnienie pola jest obowiązkowe")
     .min(3, "Minimalna liczba znaków to 3")
     .max(50, "Maksymalna liczba znaków to 50"),
