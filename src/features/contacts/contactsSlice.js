@@ -22,14 +22,22 @@ export const addContact = createAsyncThunk(
   "contacts/addContact",
   async (contact, { getState, rejectWithValue }) => {
     const { contacts } = getState();
-    const duplicate = contacts.items.find(
-      (item) => item.name === contact.name || item.phone === contact.phone
-    );
+    let duplicateMessage = null;
 
-    if (duplicate) {
-      return rejectWithValue(
-        "Contact with the same name or phone number already exists."
-      );
+    contacts.items.find((item) => {
+      if (item.name === contact.name) {
+        duplicateMessage = "Contact with the same name already exists.";
+        return true;
+      }
+      if (item.phone === contact.phone) {
+        duplicateMessage = "Contact with the same phone number already exists.";
+        return true;
+      }
+      return false;
+    });
+
+    if (duplicateMessage) {
+      return rejectWithValue(duplicateMessage);
     }
 
     const response = await api.post("/", contact);
