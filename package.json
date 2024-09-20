@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^6.1.1",
     "@redux-devtools/extension": "^3.3.0",
     "@reduxjs/toolkit": "^2.2.7",
     "@sentry/cli": "^2.36.1",
@@ -17,6 +20,7 @@
     "@sentry/tracing": "^7.114.0",
     "axios": "^1.7.7",
     "formik": "^2.4.6",
+    "fuse.js": "^7.0.0",
     "nanoid": "^5.0.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

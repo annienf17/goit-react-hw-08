@@ -1,4 +1,3 @@
-// contactsSlice.js
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -11,9 +10,18 @@ import api from "../../api";
 // Async thunk to fetch contacts
 export const fetchContacts = createAsyncThunk(
   "contacts/fetchContacts",
-  async () => {
-    const response = await api.get("/");
-    return response.data;
+  async (_, { getState, rejectWithValue }) => {
+    const { auth } = getState();
+    try {
+      const response = await api.get("/contacts", {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
@@ -21,7 +29,7 @@ export const fetchContacts = createAsyncThunk(
 export const addContact = createAsyncThunk(
   "contacts/addContact",
   async (contact, { getState, rejectWithValue }) => {
-    const { contacts } = getState();
+    const { contacts, auth } = getState();
     let duplicateMessage = null;
 
     contacts.items.find((item) => {
@@ -40,18 +48,35 @@ export const addContact = createAsyncThunk(
       return rejectWithValue(duplicateMessage);
     }
 
-    const response = await api.post("/", contact);
-    toast.info("Contact added successfully.");
-    return response.data;
+    try {
+      const response = await api.post("/contacts", contact, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      toast.info("Contact added successfully.");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
 // Async thunk to delete a contact
 export const deleteContact = createAsyncThunk(
   "contacts/deleteContact",
-  async (id) => {
-    await api.delete(`/${id}`);
-    return id;
+  async (id, { getState, rejectWithValue }) => {
+    const { auth } = getState();
+    try {
+      await api.delete(`/contacts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 

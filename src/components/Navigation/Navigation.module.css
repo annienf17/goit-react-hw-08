@@ -1,0 +1,27 @@
+/* Navigation.module.css */
+.nav {
+  color: white;
+  font-size: 2rem;
+}
+
+.navLink {
+  color: white;
+  text-decoration: none;
+  margin-right: 1rem;
+}
+
+.navLink:hover {
+  text-decoration: underline;
+}
+
+.button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 2rem;
+}
+
+.button:hover {
+  text-decoration: underline;
+}

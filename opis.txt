@@ -1,0 +1,17 @@
+Aby dodać możliwość rejestracji, logowania oraz pracy z prywatną kolekcją kontaktów do aplikacji Kontakty, wykonaj poniższe kroki:
+
+Dodaj autoryzację do backendu:
+
+Upewnij się, że backend obsługuje rejestrację, logowanie oraz autoryzację użytkowników.
+Dodaj endpointy do rejestracji (/register), logowania (/login) oraz do zarządzania kontaktami (/contacts), które będą wymagały tokena autoryzacyjnego.
+Konfiguracja Redux do obsługi autoryzacji:
+
+Stwórz slice do zarządzania stanem autoryzacji (authSlice.js).
+Aktualizacja komponentów React do obsługi rejestracji, logowania oraz wyświetlania prywatnych kontaktów:
+
+Dodaj komponenty do rejestracji (Register.js), logowania (Login.js) oraz do wyświetlania kontaktów (Contacts.js).
+Aktualizacja nawigacji:
+
+Zaktualizuj komponent nawigacji, aby wyświetlał odpowiednie linki w zależności od stanu logowania.
+
+1. Aby dostosować kod w App.jsx do obsługi rejestracji, logowania oraz pracy z prywatną kolekcją kontaktów, musisz zintegrować komponenty autoryzacji oraz odpowiednio zaktualizować routing.
