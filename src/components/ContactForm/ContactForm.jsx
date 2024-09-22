@@ -35,7 +35,6 @@ export default function ContactForm() {
       );
 
       if (addContact.fulfilled.match(resultAction)) {
-        toast.success("Contact added successfully.");
         resetForm();
       } else {
         toast.error(resultAction.payload || "Failed to add contact.");

@@ -61,7 +61,7 @@ export const addContact = createAsyncThunk(
           },
         }
       );
-      toast.info("Contact added successfully.");
+      toast.success("Contact added successfully.");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data || error.message);
@@ -80,6 +80,7 @@ export const deleteContact = createAsyncThunk(
           Authorization: `Bearer ${auth.token}`,
         },
       });
+      toast.info("Contact deleted successfully.");
       return id;
     } catch (error) {
       return rejectWithValue(error.response.data);
