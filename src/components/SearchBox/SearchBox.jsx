@@ -13,7 +13,7 @@ export default function SearchBox() {
   return (
     <div className={css.searchBox}>
       <label className={css.label}>
-        Find contacts by name
+        Find contacts by name or number {/* Zaktualizowano etykietę */}
         <input
           type="text"
           value={filter === "all" ? "" : filter}

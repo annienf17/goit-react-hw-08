@@ -132,11 +132,14 @@ const selectFilterState = (state) => state.filters.status;
 export const selectFilteredContacts = createSelector(
   [selectContactsState, selectFilterState],
   (contactsState, filter) => {
-    return filter
-      ? contactsState.items.filter((contact) =>
-          contact.name.toLowerCase().includes(filter.toLowerCase())
-        )
-      : contactsState.items;
+    if (!filter) return contactsState.items;
+
+    const lowercasedFilter = filter.toLowerCase();
+    return contactsState.items.filter(
+      (contact) =>
+        contact.name.toLowerCase().includes(lowercasedFilter) ||
+        contact.number.includes(lowercasedFilter) // Dodano filtrowanie po numerze telefonu
+    );
   }
 );
 
