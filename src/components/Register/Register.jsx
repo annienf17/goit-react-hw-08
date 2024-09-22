@@ -1,8 +1,10 @@
+// src/components/Register/Register.jsx
 import { useDispatch } from "react-redux";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { register } from "../../redux/auth/operations";
 import css from "./Register.module.css";
+import { useState } from "react";
 
 const RegisterSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -14,9 +16,20 @@ const RegisterSchema = Yup.object().shape({
 
 const Register = () => {
   const dispatch = useDispatch();
+  const [error, setError] = useState(null);
 
-  const handleRegister = (values, { setSubmitting }) => {
-    dispatch(register(values)).finally(() => setSubmitting(false));
+  const handleRegister = async (values, { setSubmitting }) => {
+    try {
+      const resultAction = await dispatch(register(values));
+      if (register.fulfilled.match(resultAction)) {
+        const token = resultAction.payload.token;
+        localStorage.setItem("token", token);
+      } else {
+        setError(resultAction.payload);
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -45,6 +58,7 @@ const Register = () => {
           <button type="submit" disabled={isSubmitting}>
             Register
           </button>
+          {error && <div className={css.error}>{error.message}</div>}
         </Form>
       )}
     </Formik>

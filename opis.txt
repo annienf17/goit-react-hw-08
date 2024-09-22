@@ -15,3 +15,51 @@ Aktualizacja nawigacji:
 Zaktualizuj komponent nawigacji, aby wyświetlał odpowiednie linki w zależności od stanu logowania.
 
 1. Aby dostosować kod w App.jsx do obsługi rejestracji, logowania oraz pracy z prywatną kolekcją kontaktów, musisz zintegrować komponenty autoryzacji oraz odpowiednio zaktualizować routing.
+
+To connect the registration page with the Register component and operations.js to the database using the provided API, follow these steps:
+
+Set up Axios Instance:
+
+Create an Axios instance with a base URL and an interceptor to include the token in the headers.
+Create the Register Component:
+
+Use Formik for form handling.
+Use Yup for validation.
+Dispatch the register action on form submission.
+Create the RegisterPage Component:
+
+Import and use the Register component.
+Set up Redux Operations:
+
+Create async thunks for registration, login, and refreshing the user.
+
+=========
+To ensure that a user is authorized and can log in to the database after registration, you need to follow these steps:
+
+Store the Token After Registration: Save the token received from the registration response in localStorage.
+Include the Token in Subsequent Requests: Ensure that the token is included in the headers of subsequent requests using an Axios interceptor.
+Handle Login and Refresh User: Ensure that the login and refresh user operations correctly handle the token.
+
+GitHub Copilot
+To ensure that a user is authorized and can log in to the database after registration, you need to follow these steps:
+
+Store the Token After Registration: Save the token received from the registration response in localStorage.
+Include the Token in Subsequent Requests: Ensure that the token is included in the headers of subsequent requests using an Axios interceptor.
+Handle Login and Refresh User: Ensure that the login and refresh user operations correctly handle the token.
+Step-by-Step Implementation
+1. Store the Token After Registration
+Update the register operation to store the token in localStorage after a successful registration.
+
+registration
+2. Include the Token in Subsequent Requests
+Ensure the Axios instance includes the token in the headers for all requests.
+
+3. Handle Registration in the Register Component
+Update the Register component to handle the registration process and store the token.
+
+;
+Summary
+Store the Token: After a successful registration or login, store the token in localStorage.
+Include the Token in Headers: Use an Axios interceptor to include the token in the headers for all requests.
+Handle Errors: Display appropriate error messages to the user if the registration or login fails.
+update Register and operations.js

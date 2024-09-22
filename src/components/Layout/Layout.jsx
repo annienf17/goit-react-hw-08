@@ -1,7 +1,7 @@
 import { Navigation } from "../Navigation/Navigation";
 // import css from "./Layout.module.css";
 
-export const Layout = ({ children }) => {
+const Layout = ({ children }) => {
   return (
     <div>
       <Navigation />
@@ -9,3 +9,5 @@ export const Layout = ({ children }) => {
     </div>
   );
 };
+
+export default Layout;

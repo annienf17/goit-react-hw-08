@@ -28,11 +28,11 @@ export const Navigation = () => {
         </>
       ) : (
         <>
-          <NavLink to="/login" className={styles.navLink}>
-            Login
-          </NavLink>
           <NavLink to="/register" className={styles.navLink}>
             Register
+          </NavLink>
+          <NavLink to="/login" className={styles.navLink}>
+            Login
           </NavLink>
         </>
       )}
