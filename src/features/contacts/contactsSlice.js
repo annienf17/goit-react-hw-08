@@ -37,7 +37,7 @@ export const addContact = createAsyncThunk(
         duplicateMessage = "Contact with the same name already exists.";
         return true;
       }
-      if (item.phone === contact.phone) {
+      if (item.number === contact.number) {
         duplicateMessage = "Contact with the same phone number already exists.";
         return true;
       }
@@ -49,11 +49,18 @@ export const addContact = createAsyncThunk(
     }
 
     try {
-      const response = await api.post("/contacts", contact, {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
+      const response = await api.post(
+        "/contacts",
+        {
+          name: contact.name,
+          number: contact.number,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
       toast.info("Contact added successfully.");
       return response.data;
     } catch (error) {

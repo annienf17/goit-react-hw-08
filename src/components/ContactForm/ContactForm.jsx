@@ -1,6 +1,5 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { nanoid } from "nanoid";
 import css from "./ContactForm.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addContact } from "../../features/contacts/contactsSlice";
@@ -30,9 +29,8 @@ export default function ContactForm() {
     try {
       const resultAction = await dispatch(
         addContact({
-          id: nanoid(),
           name: values.name,
-          phone: values.number,
+          number: values.number,
         })
       );
 

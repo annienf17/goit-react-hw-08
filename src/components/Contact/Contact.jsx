@@ -4,7 +4,7 @@ import css from "./Contact.module.css";
 import { useDispatch } from "react-redux";
 import { deleteContact } from "../../features/contacts/contactsSlice";
 
-export default function Contact({ data: { id, name, phone } }) {
+export default function Contact({ data: { id, name, number } }) {
   const dispatch = useDispatch();
 
   const handleDelete = () => {
@@ -19,7 +19,7 @@ export default function Contact({ data: { id, name, phone } }) {
           {name}
         </li>
         <li className={css.listItem}>
-          <HiPhone className={css.icon} size="20" /> {phone}
+          <HiPhone className={css.icon} size="20" /> {number}
         </li>
       </ul>
 

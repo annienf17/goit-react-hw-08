@@ -1,7 +1,21 @@
 /* Navigation.module.css */
 .nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   color: white;
-  font-size: 2rem;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+}
+
+.navLeft {
+  display: flex;
+  align-items: center;
+}
+
+.navRight {
+  display: flex;
+  align-items: right;
 }
 
 .navLink {
