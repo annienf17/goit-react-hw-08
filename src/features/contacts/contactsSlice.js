@@ -5,7 +5,7 @@ import {
   createAsyncThunk,
   createSelector,
 } from "@reduxjs/toolkit";
-import api from "../../api";
+import api from "../../api/api";
 
 // Async thunk to fetch contacts
 export const fetchContacts = createAsyncThunk(
@@ -57,7 +57,7 @@ export const addContact = createAsyncThunk(
       toast.info("Contact added successfully.");
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response.data || error.message);
     }
   }
 );

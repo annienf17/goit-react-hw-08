@@ -1,15 +1,19 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { selectIsLoggedIn } from "../../redux/auth/selectors";
+import { selectIsLoggedIn, selectUserEmail } from "../../redux/auth/selectors";
 import { logout } from "../../features/auth/authSlice";
 import styles from "./Navigation.module.css";
 
 export const Navigation = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
+  const email = useSelector(selectUserEmail);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logout()).then(() => {
+      navigate("/");
+    });
   };
 
   return (
@@ -22,6 +26,9 @@ export const Navigation = () => {
           <NavLink to="/contacts" className={styles.navLink}>
             Contacts
           </NavLink>
+          {email && (
+            <span className={styles.welcomeMessage}>Welcome: {email}</span>
+          )}
           <button onClick={handleLogout} className={styles.button}>
             Logout
           </button>

@@ -8,6 +8,7 @@ import { refreshUser } from "../../redux/auth/operations";
 import { selectIsRefreshing } from "../../redux/auth/selectors";
 import css from "./App.module.css";
 import ErrorBoundary from "../ErrorBoundary";
+import { Navigation } from "../Navigation/Navigation";
 
 const HomePage = lazy(() => import("../../pages/HomePage/HomePage"));
 const RegisterPage = lazy(() =>

@@ -2,9 +2,12 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { nanoid } from "nanoid";
 import css from "./ContactForm.module.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addContact } from "../../features/contacts/contactsSlice";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+// Define the validation schema using Yup
 const ContactFormSchema = Yup.object().shape({
   name: Yup.string()
     .matches(/^[A-Za-z\s]+$/, "Imię może zawierać tylko litery i spacje")
@@ -20,19 +23,28 @@ const ContactFormSchema = Yup.object().shape({
 
 export default function ContactForm() {
   const dispatch = useDispatch();
+  const error = useSelector((state) => state.contacts.error);
 
-  const handleAdd = (values, { resetForm }) => {
+  // Handle form submission
+  const handleAdd = async (values, { resetForm }) => {
     try {
-      dispatch(
+      const resultAction = await dispatch(
         addContact({
           id: nanoid(),
           name: values.name,
           phone: values.number,
         })
       );
-      resetForm();
+
+      if (addContact.fulfilled.match(resultAction)) {
+        toast.success("Contact added successfully.");
+        resetForm();
+      } else {
+        toast.error(resultAction.payload || "Failed to add contact.");
+      }
     } catch (error) {
       console.error("Error adding contact:", error);
+      toast.error("An unexpected error occurred.");
     }
   };
 
