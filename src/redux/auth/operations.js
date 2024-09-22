@@ -64,3 +64,30 @@ export const refreshUser = createAsyncThunk(
     }
   }
 );
+
+// Async thunk for logout
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (_, { getState, rejectWithValue }) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return rejectWithValue("No token found");
+    }
+
+    try {
+      const response = await api.post("/users/logout", null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      localStorage.removeItem("token");
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);

@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectIsLoggedIn, selectUserEmail } from "../../redux/auth/selectors";
-import { logout } from "../../features/auth/authSlice";
+import { logout } from "../../redux/auth/operations";
 import styles from "./Navigation.module.css";
 
 export const Navigation = () => {
@@ -10,10 +10,13 @@ export const Navigation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    dispatch(logout()).then(() => {
+  const handleLogout = async () => {
+    try {
+      await dispatch(logout()).unwrap();
       navigate("/");
-    });
+    } catch (error) {
+      console.error("Failed to logout:", error);
+    }
   };
 
   return (

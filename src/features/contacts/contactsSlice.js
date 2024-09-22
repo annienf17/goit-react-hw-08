@@ -1,11 +1,11 @@
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import {
   createSlice,
   createAsyncThunk,
   createSelector,
 } from "@reduxjs/toolkit";
 import api from "../../api/api";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Async thunk to fetch contacts
 export const fetchContacts = createAsyncThunk(
