@@ -13,10 +13,10 @@ export default function SearchBox() {
   return (
     <div className={css.searchBox}>
       <label className={css.label}>
-        Find contacts by name or number {/* Zaktualizowano etykietę */}
+        Find contacts by name or number
         <input
           type="text"
-          value={filter === "all" ? "" : filter}
+          value={filter}
           onChange={(e) => handleSearch(e.target.value)}
           className={css.input}
         />
