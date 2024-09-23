@@ -14,13 +14,6 @@
   list-style: none;
 }
 
-.button {
-  border: 1px solid #ccc;
-  width: 80px;
-  border-radius: 5px; /* Optional: to match the contact container */
-  cursor: pointer; /* Change cursor to pointer on hover */
-}
-
 .listItem {
   display: flex;
   align-items: center;

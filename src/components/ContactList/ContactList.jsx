@@ -9,10 +9,10 @@ import {
 import Contact from "../Contact/Contact";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ClipLoader from "react-spinners/ClipLoader"; // Import the spinner
-import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal"; // Import the ConfirmDeleteModal
-import EditContactModal from "../EditContactModal/EditContactModal"; // Import the EditContactModal
-import Fuse from "fuse.js"; // Import Fuse.js
+import ClipLoader from "react-spinners/ClipLoader";
+import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
+import EditContactModal from "../EditContactModal/EditContactModal";
+import Fuse from "fuse.js";
 
 const ContactList = () => {
   const dispatch = useDispatch();
@@ -99,17 +99,12 @@ const ContactList = () => {
   };
 
   if (loading)
-    return <ClipLoader color="#19f50a" loading={loading} size={50} />; // Use the spinner
+    return <ClipLoader color="#19f50a" loading={loading} size={50} />;
 
   return (
     <>
       <ToastContainer />
-      <input
-        type="text"
-        placeholder="Search contacts"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
+
       <ul>
         {filteredContacts.map((contact) => (
           <li key={contact.id}>

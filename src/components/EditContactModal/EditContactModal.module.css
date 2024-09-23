@@ -7,14 +7,12 @@
   transform: translate(-50%, -50%);
   border-radius: 5px;
   padding: 2rem;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.7);
 }
 .modal p {
   margin-bottom: 1rem;
 }
-.bttn {
-  margin-right: 1rem;
-}
+
 .overlay {
   position: fixed;
   top: 0;

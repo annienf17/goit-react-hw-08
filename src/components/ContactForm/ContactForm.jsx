@@ -6,6 +6,8 @@ import { addContact } from "../../features/contacts/contactsSlice";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import Button from "@mui/material/Button";
+
 // Define the validation schema using Yup
 const ContactFormSchema = Yup.object().shape({
   name: Yup.string()
@@ -69,9 +71,9 @@ export default function ContactForm() {
               </label>
             </div>
             <div className={css.buttonContainer}>
-              <button type="submit" className={css.button}>
+              <Button type="submit" variant="outlined" size="large">
                 Add contact
-              </button>
+              </Button>
             </div>
           </Form>
         </div>

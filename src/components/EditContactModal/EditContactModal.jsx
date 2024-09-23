@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
-import Modal from "react-modal"; // Import Modal from react-modal
+import Modal from "react-modal";
 import css from "./EditContactModal.module.css";
+
+import Button from "@mui/material/Button";
 
 Modal.setAppElement("#root");
 
@@ -24,6 +26,8 @@ const EditContactModal = ({ isOpen, onRequestClose, contact, onSave }) => {
       contentLabel="Edit Contact"
       className={css.modal}
       overlayClassName={css.overlay}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
     >
       <h2>Edit Contact</h2>
       <label>
@@ -42,12 +46,12 @@ const EditContactModal = ({ isOpen, onRequestClose, contact, onSave }) => {
           onChange={(e) => setNumber(e.target.value)}
         />
       </label>
-      <button className={css.bttn} onClick={handleSave}>
+      <Button variant="outlined" size="large" onClick={handleSave}>
         Save
-      </button>
-      <button className={css.bttn} onClick={onRequestClose}>
+      </Button>
+      <Button variant="outlined" size="large" onClick={onRequestClose}>
         Cancel
-      </button>
+      </Button>
     </Modal>
   );
 };
