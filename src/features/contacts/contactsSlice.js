@@ -88,6 +88,32 @@ export const deleteContact = createAsyncThunk(
   }
 );
 
+// Async thunk to update a contact
+export const updateContact = createAsyncThunk(
+  "contacts/updateContact",
+  async (contact, { getState, rejectWithValue }) => {
+    const { auth } = getState();
+    try {
+      const response = await api.patch(
+        `/contacts/${contact.id}`,
+        {
+          name: contact.name,
+          number: contact.number,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+      toast.success("Contact updated successfully.");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data || error.message);
+    }
+  }
+);
+
 const contactsSlice = createSlice({
   name: "contacts",
   initialState: {
@@ -120,6 +146,17 @@ const contactsSlice = createSlice({
         state.items = state.items.filter(
           (contact) => contact.id !== action.payload
         );
+      })
+      .addCase(updateContact.fulfilled, (state, action) => {
+        const index = state.items.findIndex(
+          (contact) => contact.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.items[index] = action.payload;
+        }
+      })
+      .addCase(updateContact.rejected, (state, action) => {
+        state.error = action.payload;
       });
   },
 });

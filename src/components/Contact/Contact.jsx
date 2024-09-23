@@ -2,7 +2,11 @@
 import { HiUser, HiPhone } from "react-icons/hi";
 import css from "./Contact.module.css";
 
-export default function Contact({ data: { id, name, number }, onDelete }) {
+export default function Contact({
+  data: { id, name, number },
+  onDelete,
+  onEdit,
+}) {
   return (
     <div className={css.contactContainer}>
       <ul className={css.contactList}>
@@ -15,6 +19,12 @@ export default function Contact({ data: { id, name, number }, onDelete }) {
         </li>
       </ul>
 
+      <button
+        className={css.button}
+        onClick={() => onEdit({ id, name, number })}
+      >
+        Edit
+      </button>
       <button className={css.button} onClick={() => onDelete(id)}>
         Delete
       </button>

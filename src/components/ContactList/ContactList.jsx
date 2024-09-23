@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchContacts,
   deleteContact,
+  updateContact,
   selectFilteredContacts,
 } from "../../features/contacts/contactsSlice";
 import Contact from "../Contact/Contact";
@@ -10,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClipLoader from "react-spinners/ClipLoader"; // Import the spinner
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal"; // Import the ConfirmDeleteModal
+import EditContactModal from "../EditContactModal/EditContactModal"; // Import the EditContactModal
 import Fuse from "fuse.js"; // Import Fuse.js
 
 const ContactList = () => {
@@ -19,7 +21,9 @@ const ContactList = () => {
   const error = useSelector((state) => state.contacts.error);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [contactToDelete, setContactToDelete] = useState(null);
+  const [contactToEdit, setContactToEdit] = useState(null);
   const [filteredContacts, setFilteredContacts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -52,12 +56,12 @@ const ContactList = () => {
     setFilteredContacts(result);
   }, [contacts, searchQuery]);
 
-  const openModal = (id) => {
+  const openDeleteModal = (id) => {
     setContactToDelete(id);
     setModalIsOpen(true);
   };
 
-  const closeModal = () => {
+  const closeDeleteModal = () => {
     setModalIsOpen(false);
     setContactToDelete(null);
   };
@@ -68,10 +72,30 @@ const ContactList = () => {
         .unwrap()
         .then(() => {
           toast.success("Contact deleted successfully");
-          closeModal();
+          closeDeleteModal();
         })
         .catch((err) => toast.error(`Error: ${err.message}`));
     }
+  };
+
+  const openEditModal = (contact) => {
+    setContactToEdit(contact);
+    setEditModalIsOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalIsOpen(false);
+    setContactToEdit(null);
+  };
+
+  const handleSave = (updatedContact) => {
+    dispatch(updateContact(updatedContact))
+      .unwrap()
+      .then(() => {
+        toast.success("Contact updated successfully");
+        closeEditModal();
+      })
+      .catch((err) => toast.error(`Error: ${err.message}`));
   };
 
   if (loading)
@@ -80,19 +104,36 @@ const ContactList = () => {
   return (
     <>
       <ToastContainer />
-
+      <input
+        type="text"
+        placeholder="Search contacts"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
       <ul>
         {filteredContacts.map((contact) => (
           <li key={contact.id}>
-            <Contact data={contact} onDelete={openModal} />
+            <Contact
+              data={contact}
+              onDelete={openDeleteModal}
+              onEdit={openEditModal}
+            />
           </li>
         ))}
       </ul>
       <ConfirmDeleteModal
         isOpen={modalIsOpen}
-        onRequestClose={closeModal}
+        onRequestClose={closeDeleteModal}
         onConfirm={handleDelete}
       />
+      {contactToEdit && (
+        <EditContactModal
+          isOpen={editModalIsOpen}
+          onRequestClose={closeEditModal}
+          contact={contactToEdit}
+          onSave={handleSave}
+        />
+      )}
     </>
   );
 };
