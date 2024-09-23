@@ -1,16 +1,8 @@
 /* eslint-disable react/prop-types */
 import { HiUser, HiPhone } from "react-icons/hi";
 import css from "./Contact.module.css";
-import { useDispatch } from "react-redux";
-import { deleteContact } from "../../features/contacts/contactsSlice";
 
-export default function Contact({ data: { id, name, number } }) {
-  const dispatch = useDispatch();
-
-  const handleDelete = () => {
-    dispatch(deleteContact(id));
-  };
-
+export default function Contact({ data: { id, name, number }, onDelete }) {
   return (
     <div className={css.contactContainer}>
       <ul className={css.contactList}>
@@ -23,7 +15,7 @@ export default function Contact({ data: { id, name, number } }) {
         </li>
       </ul>
 
-      <button className={css.button} onClick={handleDelete}>
+      <button className={css.button} onClick={() => onDelete(id)}>
         Delete
       </button>
     </div>
