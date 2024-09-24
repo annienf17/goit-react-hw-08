@@ -1,5 +1,6 @@
 /* Login.module.css */
 .form {
+  min-width: 400px;
   display: flex;
   flex-direction: column;
   gap: 1rem;

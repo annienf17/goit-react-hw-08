@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { login } from "../../redux/auth/operations";
 import css from "./Login.module.css";
+import { TextField, Button } from "@mui/material";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -24,21 +25,45 @@ const Login = () => {
       validationSchema={LoginSchema}
       onSubmit={handleLogin}
     >
-      {({ isSubmitting }) => (
+      {({ isSubmitting, handleChange, values, errors, touched }) => (
         <Form className={css.form}>
           <div className={css.formGroup}>
-            <label>Email</label>
-            <Field type="email" name="email" />
-            <ErrorMessage name="email" component="div" />
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              value={values.email}
+              onChange={handleChange}
+              error={touched.email && Boolean(errors.email)}
+              helperText={touched.email && errors.email}
+              fullWidth
+              margin="normal"
+              sx={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }}
+            />
           </div>
           <div className={css.formGroup}>
-            <label>Password</label>
-            <Field type="password" name="password" />
-            <ErrorMessage name="password" component="div" />
+            <TextField
+              label="Password"
+              name="password"
+              type="password"
+              value={values.password}
+              onChange={handleChange}
+              error={touched.password && Boolean(errors.password)}
+              helperText={touched.password && errors.password}
+              fullWidth
+              margin="normal"
+              sx={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }}
+            />
           </div>
-          <button type="submit" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={isSubmitting}
+            fullWidth
+          >
             Login
-          </button>
+          </Button>
         </Form>
       )}
     </Formik>

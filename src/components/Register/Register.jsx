@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { register } from "../../redux/auth/operations";
 import css from "./Register.module.css";
 import { useState } from "react";
+import { TextField, Button } from "@mui/material";
 
 const RegisterSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -37,26 +38,58 @@ const Register = () => {
       validationSchema={RegisterSchema}
       onSubmit={handleRegister}
     >
-      {({ isSubmitting }) => (
-        <Form className={css.form}>
+      {({ isSubmitting, handleChange, values, errors, touched }) => (
+        <Form className={`${css.form} ${css.formContainer}`}>
           <div className={css.formGroup}>
-            <label>Name</label>
-            <Field type="text" name="name" />
-            <ErrorMessage name="name" component="div" />
+            <TextField
+              label="Name"
+              name="name"
+              value={values.name}
+              onChange={handleChange}
+              error={touched.name && Boolean(errors.name)}
+              helperText={touched.name && errors.name}
+              fullWidth
+              margin="normal"
+              sx={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }}
+            />
           </div>
           <div className={css.formGroup}>
-            <label>Email</label>
-            <Field type="email" name="email" />
-            <ErrorMessage name="email" component="div" />
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              value={values.email}
+              onChange={handleChange}
+              error={touched.email && Boolean(errors.email)}
+              helperText={touched.email && errors.email}
+              fullWidth
+              margin="normal"
+              sx={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }}
+            />
           </div>
           <div className={css.formGroup}>
-            <label>Password</label>
-            <Field type="password" name="password" />
-            <ErrorMessage name="password" component="div" />
+            <TextField
+              label="Password"
+              name="password"
+              type="password"
+              value={values.password}
+              onChange={handleChange}
+              error={touched.password && Boolean(errors.password)}
+              helperText={touched.password && errors.password}
+              fullWidth
+              margin="normal"
+              sx={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }}
+            />
           </div>
-          <button type="submit" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={isSubmitting}
+            fullWidth
+          >
             Register
-          </button>
+          </Button>
           {error && <div className={css.error}>{error.message}</div>}
         </Form>
       )}

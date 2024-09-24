@@ -1,4 +1,11 @@
 /* Register.module.css */
+.formContainer {
+  min-width: 400px;
+  padding: 30px 0;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -20,4 +27,15 @@ button {
 
 button:disabled {
   background-color: #cccccc;
+}
+.label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  background-color: #bbbbbb;
 }
