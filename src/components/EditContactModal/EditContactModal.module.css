@@ -7,18 +7,25 @@
   transform: translate(-50%, -50%);
   border-radius: 5px;
   padding: 2rem;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgb(255, 255, 255);
 }
 .modal p {
   margin-bottom: 1rem;
 }
+.h2 {
+  margin-bottom: 1rem;
+}
 
+button:hover {
+  background-color: rgb(25, 118, 210);
+  color: white;
+}
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7); /* Dark background with 75% opacity */
-  z-index: 1000; /* Ensure the overlay is above other content */
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
 }

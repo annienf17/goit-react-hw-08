@@ -1,12 +1,13 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import css from "./ContactForm.module.css";
+
 import { useDispatch, useSelector } from "react-redux";
 import { addContact } from "../../features/contacts/contactsSlice";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Button from "@mui/material/Button";
+import css from "./ContactForm.module.css";
 
 // Define the validation schema using Yup
 const ContactFormSchema = Yup.object().shape({
@@ -38,12 +39,10 @@ export default function ContactForm() {
 
       if (addContact.fulfilled.match(resultAction)) {
         resetForm();
-      } else {
-        toast.error(resultAction.payload || "Failed to add contact.");
+        toast.success("Contact added successfully.");
       }
     } catch (error) {
       console.error("Error adding contact:", error);
-      toast.error("An unexpected error occurred.");
     }
   };
 

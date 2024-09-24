@@ -4,6 +4,8 @@ import { selectIsLoggedIn, selectUserEmail } from "../../redux/auth/selectors";
 import { logout } from "../../redux/auth/operations";
 import styles from "./Navigation.module.css";
 
+import Button from "@mui/material/Button";
+
 export const Navigation = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const email = useSelector(selectUserEmail);
@@ -21,27 +23,50 @@ export const Navigation = () => {
 
   return (
     <nav className={styles.nav}>
-      <NavLink to="/" className={styles.navLink}>
+      <NavLink
+        to="/"
+        className={({ isActive }) =>
+          isActive ? styles.activeNavLink : styles.navLink
+        }
+      >
         Home
       </NavLink>
       {isLoggedIn ? (
         <>
-          <NavLink to="/contacts" className={styles.navLink}>
+          <NavLink
+            to="/contacts"
+            className={({ isActive }) =>
+              isActive ? styles.activeNavLink : styles.navLink
+            }
+          >
             Contacts
           </NavLink>
           {email && (
-            <span className={styles.welcomeMessage}>Welcome: {email}</span>
+            <span className={styles.welcomeMessage}>
+              <span className={styles.welcomeText}>Welcome</span>:{" "}
+              <span className={styles.emailText}>{email}</span>
+            </span>
           )}
-          <button onClick={handleLogout} className={styles.button}>
+          <Button onClick={handleLogout} variant="outlined" size="large">
             Logout
-          </button>
+          </Button>
         </>
       ) : (
         <>
-          <NavLink to="/register" className={styles.navLink}>
+          <NavLink
+            to="/register"
+            className={({ isActive }) =>
+              isActive ? styles.activeNavLink : styles.navLink
+            }
+          >
             Register
           </NavLink>
-          <NavLink to="/login" className={styles.navLink}>
+          <NavLink
+            to="/login"
+            className={({ isActive }) =>
+              isActive ? styles.activeNavLink : styles.navLink
+            }
+          >
             Login
           </NavLink>
         </>

@@ -32,6 +32,7 @@ export default function App() {
   ) : (
     <ErrorBoundary>
       <div className={css.app}>
+        <Navigation />
         <Layout>
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>

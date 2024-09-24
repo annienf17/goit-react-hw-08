@@ -4,8 +4,6 @@ import {
   createSelector,
 } from "@reduxjs/toolkit";
 import api from "../../api/api";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 // Async thunk to fetch contacts
 export const fetchContacts = createAsyncThunk(
@@ -61,7 +59,6 @@ export const addContact = createAsyncThunk(
           },
         }
       );
-      toast.success("Contact added successfully.");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data || error.message);
@@ -80,7 +77,6 @@ export const deleteContact = createAsyncThunk(
           Authorization: `Bearer ${auth.token}`,
         },
       });
-      toast.info("Contact deleted successfully.");
       return id;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -106,7 +102,6 @@ export const updateContact = createAsyncThunk(
           },
         }
       );
-      toast.success("Contact updated successfully.");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data || error.message);
