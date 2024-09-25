@@ -5,29 +5,43 @@ import {
 } from "@reduxjs/toolkit";
 import api from "../../api/api";
 
-// Async thunk to fetch contacts
-export const fetchContacts = createAsyncThunk(
-  "contacts/fetchContacts",
-  async (_, { getState, rejectWithValue }) => {
-    const { auth } = getState();
-    try {
-      const response = await api.get("/contacts", {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
+// Reusable function to create thunks
+const createApiThunk = (type, apiCall) => {
+  return createAsyncThunk(
+    type,
+    async (payload, { getState, rejectWithValue }) => {
+      const { auth } = getState();
+      try {
+        const response = await apiCall(
+          payload,
+          auth.token,
+          getState,
+          rejectWithValue
+        );
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.response.data || error.message);
+      }
     }
-  }
+  );
+};
+
+// Async thunk to fetch contacts
+export const fetchContacts = createApiThunk(
+  "contacts/fetchContacts",
+  (payload, token) =>
+    api.get("/contacts", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
 );
 
 // Async thunk to add a contact
-export const addContact = createAsyncThunk(
+export const addContact = createApiThunk(
   "contacts/addContact",
-  async (contact, { getState, rejectWithValue }) => {
-    const { contacts, auth } = getState();
+  async (contact, token, getState, rejectWithValue) => {
+    const { contacts } = getState();
     let duplicateMessage = null;
 
     contacts.items.find((item) => {
@@ -46,67 +60,48 @@ export const addContact = createAsyncThunk(
       return rejectWithValue(duplicateMessage);
     }
 
-    try {
-      const response = await api.post(
-        "/contacts",
-        {
-          name: contact.name,
-          number: contact.number,
+    return api.post(
+      "/contacts",
+      {
+        name: contact.name,
+        number: contact.number,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data || error.message);
-    }
+      }
+    );
   }
 );
 
 // Async thunk to delete a contact
-export const deleteContact = createAsyncThunk(
+export const deleteContact = createApiThunk(
   "contacts/deleteContact",
-  async (id, { getState, rejectWithValue }) => {
-    const { auth } = getState();
-    try {
-      await api.delete(`/contacts/${id}`, {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
-      });
-      return id;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
+  (id, token) =>
+    api.delete(`/contacts/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
 );
 
 // Async thunk to update a contact
-export const updateContact = createAsyncThunk(
+export const updateContact = createApiThunk(
   "contacts/updateContact",
-  async (contact, { getState, rejectWithValue }) => {
-    const { auth } = getState();
-    try {
-      const response = await api.patch(
-        `/contacts/${contact.id}`,
-        {
-          name: contact.name,
-          number: contact.number,
+  (contact, token) =>
+    api.patch(
+      `/contacts/${contact.id}`,
+      {
+        name: contact.name,
+        number: contact.number,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data || error.message);
-    }
-  }
+      }
+    )
 );
 
 const contactsSlice = createSlice({
