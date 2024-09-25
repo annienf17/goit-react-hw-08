@@ -1,93 +1,72 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/api";
 
-// Async thunk for registration
-export const register = createAsyncThunk(
-  "auth/register",
-  async (userData, { rejectWithValue }) => {
-    try {
-      const response = await api.post("/users/signup", userData);
-      const token = response.data.token;
-      localStorage.setItem("token", token);
-      return response.data;
-    } catch (error) {
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue(error.message);
+// Reusable function to create thunks
+const createApiThunk = (type, apiCall) => {
+  return createAsyncThunk(
+    type,
+    async (payload, { getState, rejectWithValue }) => {
+      try {
+        const response = await apiCall(payload, getState);
+        return response.data;
+      } catch (error) {
+        if (error.response && error.response.data) {
+          return rejectWithValue(error.response.data);
+        } else {
+          return rejectWithValue(error.message);
+        }
       }
     }
-  }
-);
+  );
+};
 
-// Async thunk for login
-export const login = createAsyncThunk(
-  "auth/login",
-  async (credentials, { rejectWithValue }) => {
-    try {
-      const response = await api.post("/users/login", credentials);
-      const token = response.data.token;
-      localStorage.setItem("token", token);
-      return response.data;
-    } catch (error) {
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
-  }
-);
+// API call functions
+const registerApiCall = async (userData) => {
+  const response = await api.post("/users/signup", userData);
+  const token = response.data.token;
+  localStorage.setItem("token", token);
+  return response;
+};
 
-// Async thunk for refreshing user
-export const refreshUser = createAsyncThunk(
+const loginApiCall = async (credentials) => {
+  const response = await api.post("/users/login", credentials);
+  const token = response.data.token;
+  localStorage.setItem("token", token);
+  return response;
+};
+
+const refreshUserApiCall = async (_, getState) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("No token found");
+  }
+  const response = await api.get("/users/current", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
+
+const logoutApiCall = async (_, getState) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("No token found");
+  }
+  const response = await api.post("/users/logout", null, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  localStorage.removeItem("token");
+  return response;
+};
+
+// Async thunks
+export const register = createApiThunk("auth/register", registerApiCall);
+export const login = createApiThunk("auth/login", loginApiCall);
+export const refreshUser = createApiThunk(
   "auth/refreshUser",
-  async (_, { getState, rejectWithValue }) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return rejectWithValue("No token found");
-    }
-
-    try {
-      const response = await api.get("/users/current", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
-  }
+  refreshUserApiCall
 );
-
-// Async thunk for logout
-export const logout = createAsyncThunk(
-  "auth/logout",
-  async (_, { getState, rejectWithValue }) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return rejectWithValue("No token found");
-    }
-
-    try {
-      const response = await api.post("/users/logout", null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      localStorage.removeItem("token");
-      return response.data;
-    } catch (error) {
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data);
-      } else {
-        return rejectWithValue(error.message);
-      }
-    }
-  }
-);
+export const logout = createApiThunk("auth/logout", logoutApiCall);
