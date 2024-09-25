@@ -19,13 +19,16 @@ const ContactList = () => {
   const contacts = useSelector(selectFilteredContacts);
   const loading = useSelector((state) => state.contacts.loading);
   const error = useSelector((state) => state.contacts.error);
+  const filter = useSelector((state) => state.filters.status);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [contactToDelete, setContactToDelete] = useState(null);
   const [contactToEdit, setContactToEdit] = useState(null);
   const [filteredContacts, setFilteredContacts] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [initialNotificationShown, setInitialNotificationShown] =
+    useState(false);
+  const [searchNotificationShown, setSearchNotificationShown] = useState(false);
 
   useEffect(() => {
     dispatch(fetchContacts());
@@ -37,24 +40,34 @@ const ContactList = () => {
     }
   }, [error]);
 
+  // Hook to show notification if no contacts are available after loading
   useEffect(() => {
-    if (!loading && contacts.length === 0) {
+    if (!loading && contacts.length === 0 && !initialNotificationShown) {
       toast.info("No contacts available.");
+      setInitialNotificationShown(true);
     }
-  }, [loading, contacts]);
+  }, [loading, contacts, initialNotificationShown]);
 
+  // Hook to handle search using Fuse.js and show notification if no contacts found
   useEffect(() => {
     const fuse = new Fuse(contacts, {
       keys: ["name", "number"],
       threshold: 0.3,
     });
 
-    const result = searchQuery
-      ? fuse.search(searchQuery).map(({ item }) => item)
+    const result = filter
+      ? fuse.search(filter).map(({ item }) => item)
       : contacts;
 
     setFilteredContacts(result);
-  }, [contacts, searchQuery]);
+
+    if (filter && result.length === 0 && !searchNotificationShown) {
+      toast.info("No contacts found");
+      setSearchNotificationShown(true);
+    } else if (result.length > 0) {
+      setSearchNotificationShown(false);
+    }
+  }, [contacts, filter, searchNotificationShown]);
 
   const openDeleteModal = (id) => {
     setContactToDelete(id);
