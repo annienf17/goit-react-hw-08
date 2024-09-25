@@ -140,6 +140,7 @@ const ContactList = () => {
           onRequestClose={closeEditModal}
           contact={contactToEdit}
           onSave={handleSave}
+          contacts={contacts} // Pass the contacts list to EditContactModal
         />
       )}
     </>

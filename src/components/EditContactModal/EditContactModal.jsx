@@ -10,13 +10,20 @@ const StyledTextField = styled(TextField)({
   marginTop: "5px",
 });
 
-const EditContactModal = ({ isOpen, onRequestClose, contact, onSave }) => {
+const EditContactModal = ({
+  isOpen,
+  onRequestClose,
+  contact,
+  onSave,
+  contacts,
+}) => {
   Modal.setAppElement("#root");
 
   const [name, setName] = useState(contact.name);
   const [number, setNumber] = useState(contact.number);
   const [nameError, setNameError] = useState("");
   const [numberError, setNumberError] = useState("");
+  const [duplicateError, setDuplicateError] = useState("");
 
   useEffect(() => {
     setName(contact.name);
@@ -42,6 +49,18 @@ const EditContactModal = ({ isOpen, onRequestClose, contact, onSave }) => {
       setNumberError("");
     }
 
+    // Check for duplicate contacts
+    const isDuplicate = contacts.some(
+      (c) => c.id !== contact.id && (c.name === name || c.number === number)
+    );
+
+    if (isDuplicate) {
+      setDuplicateError("A contact with this name or number already exists.");
+      valid = false;
+    } else {
+      setDuplicateError("");
+    }
+
     if (valid) {
       onSave({ ...contact, name, number });
     }
@@ -58,6 +77,7 @@ const EditContactModal = ({ isOpen, onRequestClose, contact, onSave }) => {
       aria-describedby="modal-modal-description"
     >
       <h2 className={css.h2}>Edit Contact</h2>
+      {duplicateError && <p className={css.error}>{duplicateError}</p>}
       <label>
         Name:
         <StyledTextField
