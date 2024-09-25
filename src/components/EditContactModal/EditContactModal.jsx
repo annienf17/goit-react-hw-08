@@ -15,6 +15,8 @@ const EditContactModal = ({ isOpen, onRequestClose, contact, onSave }) => {
 
   const [name, setName] = useState(contact.name);
   const [number, setNumber] = useState(contact.number);
+  const [nameError, setNameError] = useState("");
+  const [numberError, setNumberError] = useState("");
 
   useEffect(() => {
     setName(contact.name);
@@ -22,7 +24,27 @@ const EditContactModal = ({ isOpen, onRequestClose, contact, onSave }) => {
   }, [contact]);
 
   const handleSave = () => {
-    onSave({ ...contact, name, number });
+    let valid = true;
+
+    // Validate name (only letters and spaces)
+    if (!/^[a-zA-Z\s]+$/.test(name)) {
+      setNameError("Name can only contain letters and spaces.");
+      valid = false;
+    } else {
+      setNameError("");
+    }
+
+    // Validate number (only digits and hyphens)
+    if (!/^[\d-]+$/.test(number)) {
+      setNumberError("Number can only contain digits and hyphens.");
+      valid = false;
+    } else {
+      setNumberError("");
+    }
+
+    if (valid) {
+      onSave({ ...contact, name, number });
+    }
   };
 
   return (
@@ -45,6 +67,8 @@ const EditContactModal = ({ isOpen, onRequestClose, contact, onSave }) => {
           onChange={(e) => setName(e.target.value)}
           fullWidth
           margin="normal"
+          error={!!nameError}
+          helperText={nameError}
         />
       </label>
       <label>
@@ -56,6 +80,8 @@ const EditContactModal = ({ isOpen, onRequestClose, contact, onSave }) => {
           onChange={(e) => setNumber(e.target.value)}
           fullWidth
           margin="normal"
+          error={!!numberError}
+          helperText={numberError}
         />
       </label>
       <BttnContainer>
