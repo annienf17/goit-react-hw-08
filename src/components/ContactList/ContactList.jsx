@@ -116,7 +116,6 @@ const ContactList = () => {
 
   return (
     <>
-    {/* time */}
       <ToastContainer autoClose={1000} />
 
       <ul>

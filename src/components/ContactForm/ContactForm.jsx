@@ -38,14 +38,30 @@ export default function ContactForm() {
       );
 
       if (addContact.fulfilled.match(resultAction)) {
+        console.log("Contact added successfully:", resultAction.payload);
         resetForm();
         toast.success("Contact added successfully.");
+      } else {
+        if (resultAction.payload) {
+          if (
+            resultAction.payload !==
+              "Contact with the same name already exists." &&
+            resultAction.payload !==
+              "Contact with the same phone number already exists."
+          ) {
+            console.error("Error adding contact:", resultAction.payload);
+            toast.error(`Error: ${resultAction.payload}`);
+          }
+        } else {
+          console.error("Error adding contact:", resultAction.error.message);
+          toast.error(`Error: ${resultAction.error.message}`);
+        }
       }
     } catch (error) {
       console.error("Error adding contact:", error);
+      toast.error(`Error: ${error.message}`);
     }
   };
-
   return (
     <Formik
       initialValues={{ name: "", number: "" }}

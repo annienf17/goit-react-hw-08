@@ -1,3 +1,4 @@
+// contactsSlice.js
 import {
   createSlice,
   createAsyncThunk,
@@ -38,52 +39,74 @@ export const fetchContacts = createApiThunk(
 );
 
 // Async thunk to add a contact
-export const addContact = createApiThunk(
+export const addContact = createAsyncThunk(
   "contacts/addContact",
-  async (contact, token, getState, rejectWithValue) => {
-    const { contacts } = getState();
+  async (contact, { getState, rejectWithValue }) => {
+    const { auth, contacts } = getState();
     let duplicateMessage = null;
 
-    contacts.items.find((item) => {
+    console.log("Checking for duplicates:", contact);
+
+    const isDuplicate = contacts.items.some((item) => {
       if (item.name === contact.name) {
         duplicateMessage = "Contact with the same name already exists.";
+        console.log("Duplicate found:", item);
         return true;
       }
       if (item.number === contact.number) {
         duplicateMessage = "Contact with the same phone number already exists.";
+        console.log("Duplicate found:", item);
         return true;
       }
       return false;
     });
 
-    if (duplicateMessage) {
+    if (isDuplicate) {
+      console.error(duplicateMessage);
       return rejectWithValue(duplicateMessage);
     }
 
-    return api.post(
-      "/contacts",
-      {
-        name: contact.name,
-        number: contact.number,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+    try {
+      const response = await api.post(
+        "/contacts",
+        {
+          name: contact.name,
+          number: contact.number,
         },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      );
+
+      console.log("Contact added successfully:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Error adding contact:",
+        error.response.data || error.message
+      );
+      return rejectWithValue(error.response.data || error.message);
+    }
   }
 );
-
 // Async thunk to delete a contact
-export const deleteContact = createApiThunk(
+export const deleteContact = createAsyncThunk(
   "contacts/deleteContact",
-  (id, token) =>
-    api.delete(`/contacts/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+  async (id, { getState, rejectWithValue }) => {
+    const { auth } = getState();
+    try {
+      await api.delete(`/contacts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      });
+      return id; // Ensure we return the id of the deleted contact
+    } catch (error) {
+      return rejectWithValue(error.response.data || error.message);
+    }
+  }
 );
 
 // Async thunk to update a contact
