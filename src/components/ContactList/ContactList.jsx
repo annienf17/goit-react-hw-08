@@ -116,7 +116,7 @@ const ContactList = () => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer autoClose={1000} />
 
       <ul>
         {filteredContacts.map((contact) => (
