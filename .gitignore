@@ -26,3 +26,6 @@ dist-ssr
 #opis
 .opis.txt
 opis.txt
+
+#.gitignore
+.env
