@@ -1,5 +1,6 @@
 import { login } from "../../redux/auth/operations";
 import AuthForm from "../../components/AuthForm/AuthForm";
+import LoginSchema from "../../validationSchemas/loginSchema";
 
 const Login = () => {
   return (
@@ -8,6 +9,7 @@ const Login = () => {
       initialValues={{ email: "", password: "" }}
       buttonText="Login"
       isRegister={false}
+      validationSchema={LoginSchema}
     />
   );
 };

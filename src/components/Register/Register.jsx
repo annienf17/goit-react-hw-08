@@ -1,5 +1,6 @@
 import { register } from "../../redux/auth/operations";
 import AuthForm from "../../components/AuthForm/AuthForm";
+import RegisterSchema from "../../validationSchemas/registerSchema";
 
 const Register = () => {
   return (
@@ -8,6 +9,7 @@ const Register = () => {
       initialValues={{ name: "", email: "", password: "" }}
       buttonText="Register"
       isRegister={true}
+      validationSchema={RegisterSchema}
     />
   );
 };
